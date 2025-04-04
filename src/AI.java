@@ -113,7 +113,7 @@ public class AI {
         if (playerCount > 0) {
             int evalScore = SCORE_TABLE[playerCount];
             if (openEnded) {
-                evalScore *= 2;
+                evalScore *= 3;
             }
             return -evalScore;
         }
