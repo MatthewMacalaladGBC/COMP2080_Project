@@ -1,3 +1,7 @@
+// COMP 2080 - Gomoku Game Project
+// Matthew Macalalad, 101510305
+// Bramjot Singh, 101511990
+
 public class AI {
     // Sets a very high score to be returned if a win is found
     public static final int WIN_SCORE = 1000000;

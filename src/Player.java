@@ -1,3 +1,7 @@
+// COMP 2080 - Gomoku Game Project
+// Matthew Macalalad, 101510305
+// Bramjot Singh, 101511990
+
 // Simple Player object to hold names and symbols
 public class Player {
     private String name;

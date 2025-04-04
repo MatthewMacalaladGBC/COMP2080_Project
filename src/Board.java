@@ -1,3 +1,7 @@
+// COMP 2080 - Gomoku Game Project
+// Matthew Macalalad, 101510305
+// Bramjot Singh, 101511990
+
 public class Board {
 
     // Final integers that will not be changed in the game (but exist as variables in case we want to try other options)
