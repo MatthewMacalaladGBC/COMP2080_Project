@@ -2,7 +2,8 @@ public class AI {
     public static final int WIN_SCORE = 1000000;
     public static final int[] SCORE_TABLE = {0, 1, 10, 100, 1000};
 
-    public static int minimax(Board boardObj, int depth, boolean isMaximizing, char computerSymbol, char playerSymbol) {
+    public static int minimax(Board boardObj, int depth, boolean isMaximizing,
+                              char computerSymbol, char playerSymbol, int alpha, int beta) {
         char[][] gameBoard = boardObj.getBoard();
 
         if (boardObj.checkWin(computerSymbol)) {
@@ -24,9 +25,13 @@ public class AI {
                 for (int j = 0; j < Board.BOARD_SIZE; j++) {
                     if (gameBoard[i][j] == Board.EMPTY_SPACE) {
                         gameBoard[i][j] = computerSymbol;
-                        int score = minimax(boardObj, (depth - 1), false, computerSymbol, playerSymbol);
+                        int score = minimax(boardObj, (depth - 1), false, computerSymbol, playerSymbol, alpha, beta);
                         gameBoard[i][j] = Board.EMPTY_SPACE;
                         bestScore = Math.max(bestScore, score);
+                        alpha = Math.max(alpha, bestScore);
+                        if (beta <= alpha) {
+                            return bestScore;
+                        }
                     }
                 }
             }
@@ -38,9 +43,13 @@ public class AI {
                 for (int j = 0; j < Board.BOARD_SIZE; j++) {
                     if (gameBoard[i][j] == Board.EMPTY_SPACE) {
                         gameBoard[i][j] = playerSymbol;
-                        int score = minimax(boardObj, depth - 1, true, computerSymbol, playerSymbol);
+                        int score = minimax(boardObj, depth - 1, true, computerSymbol, playerSymbol, alpha, beta);
                         gameBoard[i][j] = Board.EMPTY_SPACE;
                         bestScore = Math.min(bestScore, score);
+                        beta = Math.min(beta, bestScore);
+                        if (beta <= alpha) {
+                            return bestScore;
+                        }
                     }
                 }
             }
@@ -121,7 +130,7 @@ public class AI {
     }
 
     public static int[] findBestMove(Board boardObj, int depth, char computerSymbol, char playerSymbol) {
-        char[][] gameBoard = boardObj.getBoard( );;
+        char[][] gameBoard = boardObj.getBoard();
         int bestScore = Integer.MIN_VALUE;
         int[] bestMove = { -1, -1 };
 
@@ -129,7 +138,8 @@ public class AI {
             for (int j = 0; j < Board.BOARD_SIZE; j++) {
                 if (gameBoard[i][j] == Board.EMPTY_SPACE) {
                     gameBoard[i][j] = computerSymbol;
-                    int moveScore = minimax(boardObj, depth - 1, false, computerSymbol, playerSymbol);
+                    int moveScore = minimax(boardObj, depth - 1, false, computerSymbol, playerSymbol,
+                            Integer.MIN_VALUE, Integer.MAX_VALUE);
                     gameBoard[i][j] = Board.EMPTY_SPACE;
                     if (moveScore > bestScore) {
                         bestScore = moveScore;

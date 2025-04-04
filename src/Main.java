@@ -1,6 +1,6 @@
 // COMP 2080 - Gomoku Game Project
 // Matthew Macalalad, 101510305
-// Bramjot Singh,
+// Bramjot Singh, 101511990
 
 import java.util.Scanner;
 
@@ -14,8 +14,12 @@ public class Main {
         System.out.println("Enter 1 for One Player (Player vs A.I.)");
         System.out.println("Enter 2 for Two Players (Player vs Player)");
 
+        // Initialize the variable to hold game mode (single player = 1, player vs player = 2)
         int gameMode = 0;
+
+        // Infinite loop to repeatedly get user input until a valid option is selected
         while (true) {
+            // try catch in loop to check for int, then check that the int is one of the options
             try {
                 gameMode = scanner.nextInt();
                 if (gameMode < 1 || gameMode > 2) {
@@ -100,7 +104,7 @@ public class Main {
 
             if (singlePlayer && !isP1Turn && currentPlayer.getName().equals("Computer")) {
                 System.out.println("Computer is making a move...");
-                int[] move = AI.findBestMove(gameBoard, 3, currentPlayer.getSymbol(), player1.getSymbol());
+                int[] move = AI.findBestMove(gameBoard, 4, currentPlayer.getSymbol(), player1.getSymbol());
                 if (move[0] == -1) {
                     System.out.println("No valid moves remaining.");
                 } else {
