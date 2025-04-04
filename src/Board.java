@@ -83,7 +83,7 @@ public class Board {
                 gameBoard[currRow][currCol] != symbol) { return false; }
             count++;
         }
-        return count == NUM_TO_WIN;
+        return count == 5;
     }
 
     public char[][] getBoard() {

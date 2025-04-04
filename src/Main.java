@@ -99,8 +99,14 @@ public class Main {
             System.out.println(currentPlayer.getName() + "'s turn (" + currentPlayer.getSymbol() + ")");
 
             if (singlePlayer && !isP1Turn && currentPlayer.getName().equals("Computer")) {
-                System.out.println("Not implemented yet.");
-                gameOver = true;
+                System.out.println("Computer is making a move...");
+                int[] move = AI.findBestMove(gameBoard, 3, currentPlayer.getSymbol(), player1.getSymbol());
+                if (move[0] == -1) {
+                    System.out.println("No valid moves remaining.");
+                } else {
+                    gameBoard.setCell(currentPlayer.getSymbol(), move[0], move[1]);
+                    System.out.println("Computer has made a move at row " + (move[0] + 1) + ", column " + (move[1] + 1));
+                }
             } else {
                 int row, col;
                 while (true) {
