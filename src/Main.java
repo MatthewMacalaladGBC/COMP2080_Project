@@ -5,11 +5,6 @@
 import java.util.Scanner;
 
 public class Main {
-
-    static final int BOARD_SIZE = 9;
-    static final char EMPTY_SPACE = '*';
-    static final int NUM_TO_WIN = 5;
-
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -38,24 +33,18 @@ public class Main {
 
         scanner.nextLine(); // Clears any leftover input (ex. newline character left after nextInt())
 
-        String player1Name = "";
-        String player2Name = "";
-        char player1Symbol = ' ';
-        char player2Symbol = ' ';
-        boolean singlePlayer = gameMode == 1;
+        boolean singlePlayer = (gameMode == 1);
+        Player player1, player2;
+        String symbolChoice;
+        char player1Symbol, player2Symbol;
 
         if (singlePlayer) {
-            System.out.println("A.I. opponent logic not yet implemented.");
-        } else {
-            System.out.print("Player 1, enter your name: ");
-            player1Name = scanner.nextLine();
-            System.out.print("Player 2, enter your name: ");
-            player2Name = scanner.nextLine();
+            System.out.print("Enter your name: ");
+            String playerName = scanner.nextLine();
 
-            System.out.println(player1Name + ", choose your colour.");
+            System.out.println(playerName + ", choose your colour.");
             System.out.println("Enter B (for Black) to go first.");
             System.out.println("Enter W (for White) to go second.");
-            String symbolChoice = "";
             while (true) {
                 symbolChoice = scanner.next().toUpperCase();
                 if (symbolChoice.equals("B") || symbolChoice.equals("W")) {
@@ -66,54 +55,103 @@ public class Main {
                     System.out.println("Invalid symbol chosen. Please enter B or W.");
                 }
             }
+            player1 = new Player(playerName, player1Symbol);
+            player2 = new Player("Computer", player2Symbol);
+        } else {
+            System.out.print("Player 1, enter your name: ");
+            String name1 = scanner.nextLine();
+            System.out.print("Player 2, enter your name: ");
+            String name2 = scanner.nextLine();
 
-            if (player1Symbol == 'B') {
-                System.out.println(player1Name + " is B (Black) and " + player2Name + " is W (White).");
-                System.out.println(player1Name + " will be going first.");
-            } else {
-                System.out.println(player1Name + " is W (White) and " + player2Name + " is B (Black).");
-                System.out.println(player2Name + " will be going first.");
+            System.out.println(name1 + ", choose your colour.");
+            System.out.println("Enter B (for Black) to go first.");
+            System.out.println("Enter W (for White) to go second.");
+            while (true) {
+                symbolChoice = scanner.next().toUpperCase();
+                if (symbolChoice.equals("B") || symbolChoice.equals("W")) {
+                    player1Symbol = symbolChoice.charAt(0);
+                    player2Symbol = (player1Symbol == 'B' ? 'W' : 'B');
+                    break;
+                } else {
+                    System.out.println("Invalid symbol chosen. Please enter B or W.");
+                }
             }
-
+            player1 = new Player(name1, player1Symbol);
+            player2 = new Player(name2, player2Symbol);
         }
 
-        char[][] gameBoard = new char[BOARD_SIZE][BOARD_SIZE];
-        intializeBoard(gameBoard);
+        if (player1.getSymbol() == 'B') {
+            System.out.println(player1.getName() + " is B (Black) and " + player2.getName() + " is W (White).");
+            System.out.println(player1.getName() + " will be going first.");
+        } else {
+            System.out.println(player1.getName() + " is W (White) and " + player2.getName() + " is B (Black).");
+            System.out.println(player2.getName() + " will be going first.");
+        }
+
+        Board gameBoard = new Board();
 
         boolean gameOver = false;
-        boolean isP1Turn = (player1Symbol == 'B');
+        boolean isP1Turn = (player1.getSymbol() == 'B');
 
         while (!gameOver) {
-            displayBoard(gameBoard);
+            gameBoard.display();
+            Player currentPlayer = isP1Turn ? player1 : player2;
+            System.out.println(currentPlayer.getName() + "'s turn (" + currentPlayer.getSymbol() + ")");
 
-            System.out.println("Enter a line to exit (temp stopping point):");
-            String temp = scanner.nextLine();
-            gameOver = true;
-        }
-
-    }
-
-    public static void intializeBoard(char[][] gameBoard) {
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                gameBoard[i][j] = EMPTY_SPACE;
+            if (singlePlayer && !isP1Turn && currentPlayer.getName().equals("Computer")) {
+                System.out.println("Not implemented yet.");
+                gameOver = true;
+            } else {
+                int row, col;
+                while (true) {
+                    System.out.print("Enter row (1-" + Board.BOARD_SIZE + "): ");
+                    try {
+                        row = scanner.nextInt() - 1;
+                        if (row < 1 || row > 9) {
+                            System.out.println("Invalid input. Try again (Enter a number between 1 and 9).");
+                            continue;
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Invalid input. Try again (Enter a number between 1 and 9).");
+                        scanner.nextLine(); // Clears scanner input to break infinite loop
+                        continue;
+                    }
+                    System.out.print("Enter column (1-" + Board.BOARD_SIZE + "): ");
+                    try {
+                        col = scanner.nextInt() - 1;
+                        if (col < 1 || col > 9) {
+                            System.out.println("Invalid input. Try again (Enter a number between 1 and 9).");
+                            continue;
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Invalid input. Try again (Enter a number between 1 and 9).");
+                        scanner.nextLine(); // Clears scanner input to break infinite loop
+                        continue;
+                    }
+                    if (gameBoard.isValidMove(row, col)) {
+                        break;
+                    } else {
+                        System.out.println("Invalid move. Cell is either out of bounds or already occupied. Try again.");
+                    }
+                }
+                gameBoard.setCell(currentPlayer.getSymbol(), row, col);
             }
-        }
-    }
 
-    public static void displayBoard(char[][] gameBoard) {
-        System.out.print("  ");
-        for (int j = 0; j < BOARD_SIZE; j++) {
-            System.out.print((j + 1) + " ");
-        }
-        System.out.println();
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            System.out.print((i + 1) + " ");
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                System.out.print(gameBoard[i][j] + " ");
+            if (gameBoard.checkWin(currentPlayer.getSymbol())) {
+                gameBoard.display();
+                System.out.println(currentPlayer.getName() + " (" + currentPlayer.getSymbol() + ") wins!");
+                gameOver = true;
+                break;
             }
-            System.out.println();
+            if (gameBoard.isBoardFull()) {
+                gameBoard.display();
+                System.out.println("The game is a draw!");
+                gameOver = true;
+                break;
+            }
+
         }
+
     }
 
 }
