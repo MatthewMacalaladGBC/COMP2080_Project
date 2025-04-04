@@ -107,7 +107,7 @@ public class Main {
                     System.out.print("Enter row (1-" + Board.BOARD_SIZE + "): ");
                     try {
                         row = scanner.nextInt() - 1;
-                        if (row < 1 || row > 9) {
+                        if (row < 0 || row > 8) {
                             System.out.println("Invalid input. Try again (Enter a number between 1 and 9).");
                             continue;
                         }
@@ -119,7 +119,7 @@ public class Main {
                     System.out.print("Enter column (1-" + Board.BOARD_SIZE + "): ");
                     try {
                         col = scanner.nextInt() - 1;
-                        if (col < 1 || col > 9) {
+                        if (col < 0 || col > 8) {
                             System.out.println("Invalid input. Try again (Enter a number between 1 and 9).");
                             continue;
                         }
@@ -150,7 +150,11 @@ public class Main {
                 break;
             }
 
+            isP1Turn = !isP1Turn;
+
         }
+
+        scanner.close();
 
     }
 

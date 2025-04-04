@@ -55,13 +55,14 @@ public class Board {
     public boolean checkWin(char symbol) {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                // Vertical (downwards) check
+                // Applies bounds to prevent unnecessary cell checks
+                // Vertical (downwards) check [if row > 4, cannot get five in a row vertically (max row = 8)]
                 if (i <= BOARD_SIZE - 5 && checkDirection(i, j, symbol, 1, 0)) return true;
-                // Horizontal (right) check
+                // Horizontal (right) check [if col > 4, cannot get five in a row horizontally (max col = 8)]
                 if (j <= BOARD_SIZE - 5 && checkDirection(i, j, symbol, 0, 1)) return true;
-                // Diagonal (down-right) check
+                // Diagonal (down-right) check [both the above checks apply, going down AND right]
                 if (i <= BOARD_SIZE - 5 && j <= BOARD_SIZE - 5 && checkDirection(i, j, symbol, 1, 1)) return true;
-                // Diagonal (down-right) check
+                // Diagonal (down-right) check [same vertical bound, but going left instead of right so col must be >= 4 (min col = 0)]
                 if (i <= BOARD_SIZE - 5 && j >= 4 && checkDirection(i, j, symbol, 1, -1)) return true;
             }
         }
@@ -71,6 +72,9 @@ public class Board {
     public boolean checkDirection(int row, int column, char symbol, int rowDelta, int colDelta) {
         int count = 0;
         for (int i = 0; i < 5; i++) {
+            // Loops up to 5 times, checking provided direction for symbol.
+            // Row and column increment from the starting point based on the provided direction
+            // Ex. for down right (rowDelta = 1, and colDelta = 1), every loop increases both row and column by one
             int currRow = row + (rowDelta * i);
             int currCol = column + (colDelta * i);
             if (currCol < 0 ||
