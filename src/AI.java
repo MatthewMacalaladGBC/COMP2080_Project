@@ -192,7 +192,7 @@ public class AI {
                     // (ensures full range of scores is considered initially, by setting worst case for both maximizer and minimizer)
                     int moveScore = minimax(boardObj, depth - 1, false, computerSymbol, playerSymbol,
                             Integer.MIN_VALUE, Integer.MAX_VALUE);
-                    // After recursive function ends, reset the board state
+                    // After recursive function ends, reset the board state (undoes simulated move)
                     gameBoard[i][j] = Board.EMPTY_SPACE;
                     if (moveScore > bestScore) {
                         // If the found score for the simulated move is greater than the current best score,

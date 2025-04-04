@@ -1,3 +1,4 @@
+// Simple Player object to hold names and symbols
 public class Player {
     private String name;
     private char symbol;
