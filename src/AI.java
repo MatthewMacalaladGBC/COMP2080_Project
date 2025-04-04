@@ -90,11 +90,32 @@ public class AI {
         if (computerCount > 0 && playerCount > 0) {
             return 0;
         }
+
+        boolean openEnded = false;
+        int preRow = row - rowDelta;
+        int preCol = col - colDelta;
+        int postRow = row + Board.NUM_TO_WIN * rowDelta;
+        int postCol = col + Board.NUM_TO_WIN * colDelta;
+
+        boolean openPre = (preRow < 0 || preCol < 0 || preRow >= Board.BOARD_SIZE || preCol >= Board.BOARD_SIZE
+                || board[preRow][preCol] == Board.EMPTY_SPACE);
+        boolean openPost = (postRow < 0 || postCol < 0 || postRow >= Board.BOARD_SIZE || postCol >= Board.BOARD_SIZE
+                || board[postRow][postCol] == Board.EMPTY_SPACE);
+        openEnded = openPre && openPost;
+
         if (computerCount > 0) {
-            return SCORE_TABLE[computerCount];
+            int evalScore = SCORE_TABLE[computerCount];
+            if (openEnded) {
+                evalScore *= 2;
+            }
+            return evalScore;
         }
         if (playerCount > 0) {
-            return -SCORE_TABLE[playerCount];
+            int evalScore = -SCORE_TABLE[playerCount];
+            if (openEnded) {
+                evalScore *= 2;
+            }
+            return -evalScore;
         }
         return 0;
     }
